@@ -1,5 +1,5 @@
 <template>
-    <nav class="navbar fixed-top navbar-expand-lg navbar-light">
+    <nav class="navbar fixed-top navbar-expand-lg navbar-dark bg-dark">
         <a class="navbar-brand" href="#">TaskBoard</a>
         <button class="navbar-toggler" type="button"
         data-toggle="collapse" data-target="#navbarSupportedContent"
