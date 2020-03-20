@@ -1,17 +1,17 @@
 <template>
-    <div class="container-md">
-        Login
-    </div>
+  <div class="container-md">
+    Login
+  </div>
 </template>
 
 <script>
 
 export default {
-    name: 'Login',
-    data() {
-        return {
-        };
-    },
+  name: 'Login',
+  data() {
+    return {
+    };
+  },
 };
 </script>
 

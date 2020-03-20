@@ -6,41 +6,41 @@ Vue.use(Vuex);
 
 export default new Vuex.Store({
 
-    state: {
-        projects: {
-            loaded: false,
-            data: [],
-        },
+  state: {
+    projects: {
+      loaded: false,
+      data: [],
     },
+  },
 
-    getters: {
-    },
+  getters: {
+  },
 
-    mutations: {
-        setProjects: (state, payload) => {
-            if (payload === null) {
-                state.projects.data = [];
-                state.projects.loaded = false;
-            }
-            else {
-                state.projects.data = payload;
-                state.projects.loaded = true;
-            }
-        },
+  mutations: {
+    setProjects: (state, payload) => {
+      if (payload === null) {
+        state.projects.data = [];
+        state.projects.loaded = false;
+      }
+      else {
+        state.projects.data = payload;
+        state.projects.loaded = true;
+      }
     },
+  },
 
-    actions: {
-        getProjects: async ({ commit }) => {
-            try {
-                const response = await projects.get();
-                commit('setProjects', response.data);
-            }
-            catch (err) {
-                // console.error(err);
-                commit('setProjects', null);
-                throw new Error(err);
-            }
-        },
+  actions: {
+    getProjects: async ({ commit }) => {
+      try {
+        const response = await projects.get();
+        commit('setProjects', response.data);
+      }
+      catch (err) {
+        // console.error(err);
+        commit('setProjects', null);
+        throw new Error(err);
+      }
     },
+  },
 
 });

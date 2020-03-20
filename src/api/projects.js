@@ -4,18 +4,18 @@ import config from './config';
 const url = `${config.apiUrl}/projects`;
 
 const get = async () => {
-    try {
-        const projects = await axios.get(url);
-        return projects;
-    }
-    catch (err) {
-        // console.error(err);
-        throw new Error(err);
-    }
+  try {
+    const projects = await axios.get(url);
+    return projects;
+  }
+  catch (err) {
+    // console.error(err);
+    throw new Error(err);
+  }
 };
 
 const projects = {
-    get,
+  get,
 };
 
 export default projects;
