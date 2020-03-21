@@ -9,6 +9,9 @@ body {
     overflow-x: hidden;
     overflow-y: scroll;
 }
+.icon-gray {
+  stroke: gray;
+}
 /* #app {
     font-family: Avenir, Helvetica, Arial, sans-serif;
     -webkit-font-smoothing: antialiased;
