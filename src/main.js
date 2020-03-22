@@ -1,11 +1,15 @@
 import Vue from 'vue';
 
-import 'bootstrap/dist/js/bootstrap.min';
+// import 'bootstrap/dist/js/bootstrap.min';
+import { BootstrapVue, IconsPlugin } from 'bootstrap-vue';
 import 'bootswatch/dist/sandstone/bootstrap.css';/* lux */
 
 import App from './App.vue';
 import router from './router';
 import store from './store';
+
+Vue.use(BootstrapVue);
+Vue.use(IconsPlugin);
 
 Vue.config.productionTip = false;
 

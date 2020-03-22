@@ -4,6 +4,7 @@ import LandingPage from '@/views/LandingPage.vue';
 import Login from '@/views/Login.vue';
 import Layout from '@/views/Layout.vue';
 import Home from '@/views/Home.vue';
+import Project from '@/views/Project.vue';
 
 Vue.use(VueRouter);
 
@@ -27,6 +28,11 @@ const routes = [
         path: '/home',
         name: 'Home',
         component: Home,
+      },
+      {
+        path: '/project/:id',
+        name: 'Project',
+        component: Project,
       },
     ],
   },

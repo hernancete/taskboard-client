@@ -12,6 +12,9 @@ body {
 .icon-gray {
   stroke: gray;
 }
+.modal-backdrop {
+  opacity: 0.4 !important;
+}
 /* #app {
     font-family: Avenir, Helvetica, Arial, sans-serif;
     -webkit-font-smoothing: antialiased;

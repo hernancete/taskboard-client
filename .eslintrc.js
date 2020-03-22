@@ -17,5 +17,6 @@ module.exports = {
     'max-len': ["warn", {"code": 100}],
     'brace-style': ["error", "stroustrup", { "allowSingleLine": true }],
     'no-unused-vars': "warn",
+    'comma-spacing': "warn",
   },
 };
