@@ -1,7 +1,7 @@
 import Vue from 'vue';
 
-import 'bootswatch/dist/sandstone/bootstrap.css';/* lux */
 import 'bootstrap/dist/js/bootstrap.min';
+import 'bootswatch/dist/sandstone/bootstrap.css';/* lux */
 
 import App from './App.vue';
 import router from './router';

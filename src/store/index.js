@@ -7,10 +7,8 @@ Vue.use(Vuex);
 export default new Vuex.Store({
 
   state: {
-    projects: {
-      loaded: false,
-      data: [],
-    },
+    projectsLoaded: false,
+    projects: [],
   },
 
   getters: {
@@ -19,12 +17,12 @@ export default new Vuex.Store({
   mutations: {
     setProjects: (state, payload) => {
       if (payload === null) {
-        state.projects.data = [];
-        state.projects.loaded = false;
+        state.projects = [];
+        state.projectsLoaded = false;
       }
       else {
-        state.projects.data = payload;
-        state.projects.loaded = true;
+        state.projects = payload;
+        state.projectsLoaded = true;
       }
     },
   },

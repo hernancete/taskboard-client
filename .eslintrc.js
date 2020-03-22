@@ -14,7 +14,8 @@ module.exports = {
     'no-console': process.env.NODE_ENV === 'production' ? 'error' : 'off',
     'no-debugger': process.env.NODE_ENV === 'production' ? 'error' : 'off',
     'indent': ["error", 2],
-    'max-len': ["error", {"code": 100}],
+    'max-len': ["warn", {"code": 100}],
     'brace-style': ["error", "stroustrup", { "allowSingleLine": true }],
+    'no-unused-vars': "warn",
   },
 };
