@@ -1,6 +1,6 @@
 <template>
   <div>
-    <nav-var></nav-var>
+    <navbar></navbar>
     <div class="layout">
       <router-view/>
     </div>
@@ -8,12 +8,12 @@
 </template>
 
 <script>
-import NavVar from '../components/NavVar.vue';
+import Navbar from '../components/Navbar.vue';
 
 export default {
   name: 'Layout',
   components: {
-    NavVar,
+    Navbar,
   },
 };
 </script>
@@ -21,7 +21,7 @@ export default {
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
 .layout {
-  padding-top: 120px;
+  padding-top: 64px;
   padding-bottom: 120px;
 }
 </style>

@@ -18,5 +18,6 @@ module.exports = {
     'brace-style': ["error", "stroustrup", { "allowSingleLine": true }],
     'no-unused-vars': "warn",
     'comma-spacing': "warn",
+    'eqeqeq': "warn",
   },
 };

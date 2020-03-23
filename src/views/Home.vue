@@ -1,14 +1,11 @@
 <template>
-  <div class="container-lg">
+  <div class="container-lg home-view">
 
-    <div v-if="!projectsLoaded" class="d-flex justify-content-center align-items-center">
-      <clock-icon size="1.5x"></clock-icon>
-      <div class="px-2">Cargando...</div>
-    </div>
+    <loading-text v-if="!projectsLoaded"></loading-text>
     <div v-else class="row">
 
       <div class="col-md-4 col-sm-6 col-12 mb-4 pointer"
-      @click="openEditProject(0)">
+      @click="openEditProject($event, 0)">
         <div class="card new-card">
           <div class="card-img-top">
             <div class="d-flex justify-content-center"
@@ -36,7 +33,7 @@
             <h3 class="card-title">
               {{ project.name }}
               <button type="button" class="btn btn-sm float-right"
-              @click="openEditProject(project.id)">
+              @click="openEditProject($event, project.id)">
                 <edit-3-icon size="1.5x"></edit-3-icon>
               </button>
             </h3>
@@ -59,20 +56,20 @@
 <script>
 
 import {
-  FolderPlusIcon, Edit3Icon, ClockIcon,
+  FolderPlusIcon, Edit3Icon,
 } from 'vue-feather-icons';
 import { mapState, mapActions } from 'vuex';
+import LoadingText from '@/components/LoadingText.vue';
 import EditProjectForm from '@/components/EditProjectForm.vue';
-
 
 export default {
   name: 'Home',
 
   components: {
+    LoadingText,
     FolderPlusIcon,
     Edit3Icon,
-    ClockIcon,
-    'edit-project-form': EditProjectForm,
+    EditProjectForm,
   },
 
   data() {
@@ -94,7 +91,7 @@ export default {
   methods: {
     ...mapActions(['getProjects']),
 
-    openEditProject(projectId) {
+    openEditProject(event, projectId) {
       if (projectId === 0) {
         this.editingProject = Object.assign(this.editing, {
           id: 0,
@@ -104,6 +101,7 @@ export default {
         });
       }
       else {
+        event.stopPropagation();
         const e = this.projects.find((p) => p.id === projectId);
         this.editingProject = Object.assign(this.editing, e);
       }
@@ -116,14 +114,16 @@ export default {
   },
 
   created() {
-    this.getProjects();
+    if (!this.projectsLoaded) {
+      this.getProjects();
+    }
   },
 };
 </script>
 
 <style scoped>
-.pointer {
-  cursor: pointer;
+.home-view {
+  padding-top: 64px;
 }
 .new-card {
   border-style: dashed;

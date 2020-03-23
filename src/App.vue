@@ -6,14 +6,17 @@
 
 <style>
 body {
-    overflow-x: hidden;
-    overflow-y: scroll;
+  overflow-x: hidden;
+  overflow-y: scroll;
 }
 .icon-gray {
   stroke: gray;
 }
 .modal-backdrop {
   opacity: 0.4 !important;
+}
+.pointer {
+  cursor: pointer;
 }
 /* #app {
     font-family: Avenir, Helvetica, Arial, sans-serif;
