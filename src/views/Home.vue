@@ -1,10 +1,15 @@
 <template>
   <div class="container-lg home-view">
+    <secondary-navbar>
+      <button slot="right" class="btn btn-outline-primary"
+        @click="openEditProject($event, 0)"
+        >New Project</button>
+    </secondary-navbar>
 
-    <loading-text v-if="!projectsLoaded"></loading-text>
+    <loading-text v-if="!loaded || loading"></loading-text>
     <div v-else class="row">
 
-      <div class="col-md-4 col-sm-6 col-12 mb-4 pointer"
+      <!-- <div class="col-md-4 col-sm-6 col-12 mb-4 pointer"
       @click="openEditProject($event, 0)">
         <div class="card new-card">
           <div class="card-img-top">
@@ -21,7 +26,7 @@
             <p class="card-text">Click to create a new awesome project!</p>
           </div>
         </div>
-      </div>
+      </div> -->
 
       <div v-for="project in projects" :key="project.id"
       class="col-md-4 col-sm-6 col-12 mb-4 pointer"
@@ -43,7 +48,8 @@
       </div>
     </div>
 
-    <b-modal id="edit-project" v-model="editing">
+    <b-modal id="edit-project" v-model="editing"
+      @ok="edit">
       <template v-slot:modal-title>{{ editingProject.name }}</template>
       <template v-slot>
         <edit-project-form :project="editingProject"></edit-project-form>
@@ -55,57 +61,71 @@
 
 <script>
 
-import {
-  FolderPlusIcon, Edit3Icon,
-} from 'vue-feather-icons';
-import { mapState, mapActions } from 'vuex';
+import { Edit3Icon } from 'vue-feather-icons';
+import { mapState, mapGetters, mapActions } from 'vuex';
 import LoadingText from '@/components/LoadingText.vue';
 import EditProjectForm from '@/components/EditProjectForm.vue';
+import SecondaryNavbar from '@/components/SecondaryNavbar.vue';
 
 export default {
   name: 'Home',
 
   components: {
     LoadingText,
-    FolderPlusIcon,
     Edit3Icon,
     EditProjectForm,
+    SecondaryNavbar,
   },
 
   data() {
     return {
       editing: false,
-      editingProject: {
-        id: 0,
-        name: '',
-        description: '',
-        imageUrl: '',
-      },
+      editingProject: {},
     };
   },
 
   computed: {
-    ...mapState(['projectsLoaded', 'projects']),
+    ...mapState('projects', {
+      loaded: 'loaded',
+      loading: 'loading',
+      creating: 'creating',
+      projects: 'projects',
+    }),
+    ...mapGetters('projects', {
+      emptyProject: 'emptyProject',
+    }),
   },
 
   methods: {
-    ...mapActions(['getProjects']),
+    ...mapActions('projects', {
+      getProjects: 'get',
+      createProject: 'create',
+      updateProject: 'update',
+    }),
 
     openEditProject(event, projectId) {
       if (projectId === 0) {
-        this.editingProject = Object.assign(this.editing, {
-          id: 0,
-          name: 'New Project',
-          description: '',
-          imageUrl: '',
-        });
+        this.editingProject = { ...this.emptyProject };
       }
       else {
         event.stopPropagation();
         const e = this.projects.find((p) => p.id === projectId);
-        this.editingProject = Object.assign(this.editing, e);
+        this.editingProject = { ...e };
       }
       this.editing = true;
+    },
+
+    edit() {
+      // TODO: do some form validation
+      if (this.editingProject.id === 0) {
+        const newProject = { ...this.editingProject };
+        delete newProject.id;
+        this.createProject(newProject);
+      }
+      else {
+        const updateProject = { ...this.editingProject };
+        this.updateProject(updateProject);
+      }
     },
 
     goToProject(projectId) {
@@ -114,7 +134,7 @@ export default {
   },
 
   created() {
-    if (!this.projectsLoaded) {
+    if (!this.loaded) {
       this.getProjects();
     }
   },
@@ -122,9 +142,6 @@ export default {
 </script>
 
 <style scoped>
-.home-view {
-  padding-top: 64px;
-}
 .new-card {
   border-style: dashed;
   border-width: .2rem;

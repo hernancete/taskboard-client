@@ -1,10 +1,13 @@
 <template>
   <div class="container-lg project-view">
-    <div class="mb-3 d-flex align-items-center">
-      <h3 class="mr-auto">{{ project.name }}</h3>
-      <button class="btn btn-outline-primary">New Task</button>
-    </div>
-    <loading-text v-if="!projectsLoaded"></loading-text>
+    <secondary-navbar :title="title">
+      <button slot="left" type="button" class="btn btn-sm"
+        @click="goHome">
+        <b-icon-chevron-left font-scale="2"></b-icon-chevron-left>
+      </button>
+      <button slot="right" class="btn btn-outline-primary">New Task</button>
+    </secondary-navbar>
+    <loading-text v-if="!loaded || loading"></loading-text>
     <div v-else class="row">
       <div class="col-4">
         <h5 class="text-primary d-flex justify-content-center">ToDo</h5>
@@ -36,36 +39,52 @@
 
 <script>
 import { mapState, mapActions } from 'vuex';
+import { BIconChevronLeft } from 'bootstrap-vue';
 import LoadingText from '@/components/LoadingText.vue';
+import SecondaryNavbar from '@/components/SecondaryNavbar.vue';
 
 export default {
   name: 'Project',
 
   components: {
     LoadingText,
+    SecondaryNavbar,
+    BIconChevronLeft,
   },
 
   data() {
     return {
       project: {},
+      title: '...',
     };
   },
 
   computed: {
-    ...mapState(['projectsLoaded', 'projects']),
+    ...mapState('projects', {
+      loaded: 'loaded',
+      loading: 'loading',
+      projects: 'projects',
+    }),
   },
 
   methods: {
-    ...mapActions(['getProjects']),
+    ...mapActions('projects', {
+      getProjects: 'get',
+    }),
 
     init() {
       const projectId = parseInt(this.$route.params.id, 10);
       this.project = this.projects.find((p) => p.id === projectId);
+      this.title = this.project.name;
+    },
+
+    goHome() {
+      this.$router.go(-1);
     },
   },
 
   created() {
-    if (!this.projectsLoaded) {
+    if (!this.loaded) {
       this.getProjects()
         .then(() => this.init())
         .catch(() => console.error('Something went wrong getting projects.'));
@@ -78,12 +97,6 @@ export default {
 </script>
 
 <style scoped>
-.project-view {
-  padding-top: 8px;
-}
-.pointer {
-  cursor: pointer;
-}
 .new-card {
   border-style: dashed;
   border-width: .2rem;

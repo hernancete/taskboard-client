@@ -8,8 +8,8 @@
       aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
       </button>
-      <div class="collapse navbar-collapse ml-auto" id="navbarSupportedContent">
-        <ul class="navbar-nav">
+      <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <ul class="navbar-nav ml-auto">
           <li class="nav-item pointer">
             <div class="nav-link" @click="goHome">Home</div>
           </li>
