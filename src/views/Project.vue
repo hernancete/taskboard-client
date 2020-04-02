@@ -1,11 +1,13 @@
 <template>
   <div class="container-lg project-view">
     <secondary-navbar :title="title">
-      <button slot="left" type="button" class="btn btn-sm"
+      <b-button slot="left" variant="outline" size="sm" class="left"
         @click="goHome">
         <b-icon-chevron-left font-scale="2"></b-icon-chevron-left>
-      </button>
-      <button slot="right" class="btn btn-outline-primary">New Task</button>
+      </b-button>
+      <b-button slot="right" variant="outline-primary">
+        <b-icon-plus font-scale="2"></b-icon-plus> New Task
+      </b-button>
     </secondary-navbar>
     <loading-text v-if="!loaded || loading"></loading-text>
     <div v-else class="row">
@@ -39,7 +41,7 @@
 
 <script>
 import { mapState, mapActions } from 'vuex';
-import { BIconChevronLeft } from 'bootstrap-vue';
+import { BIconChevronLeft, BIconPlus } from 'bootstrap-vue';
 import LoadingText from '@/components/LoadingText.vue';
 import SecondaryNavbar from '@/components/SecondaryNavbar.vue';
 
@@ -50,6 +52,7 @@ export default {
     LoadingText,
     SecondaryNavbar,
     BIconChevronLeft,
+    BIconPlus,
   },
 
   data() {

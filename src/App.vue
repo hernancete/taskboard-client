@@ -25,4 +25,18 @@ body {
     text-align: center;
     color: #2c3e50;
 } */
+
+button.left {
+  margin-left: -12px;
+}
+button.btn-sm.left {
+  margin-left: -8px;
+}
+button.right {
+  margin-right: -12px;
+}
+button.btn-sm.right {
+  margin-right: -8px;
+}
+
 </style>

@@ -1,17 +1,17 @@
 <template>
   <div class="d-flex justify-content-center align-items-center">
-    <clock-icon size="1.5x"></clock-icon>
+    <b-icon-clock font-scale="2"></b-icon-clock>
     <div class="px-2">Cargando...</div>
   </div>
 </template>
 
 <script>
-import { ClockIcon } from 'vue-feather-icons';
+import { BIconClock } from 'bootstrap-vue';
 
 export default {
   name: 'LoadingText',
   components: {
-    ClockIcon,
+    BIconClock,
   },
 };
 </script>

@@ -1,9 +1,10 @@
 <template>
   <div class="container-lg home-view">
     <secondary-navbar>
-      <button slot="right" class="btn btn-outline-primary"
-        @click="openEditProject($event, 0)"
-        >New Project</button>
+      <b-button slot="right" variant="outline-primary"
+        @click="openEditProject($event, 0)">
+        <b-icon-plus font-scale="2"></b-icon-plus> New Project
+      </b-button>
     </secondary-navbar>
 
     <loading-text v-if="!loaded || loading"></loading-text>
@@ -37,10 +38,10 @@
           <div class="card-body">
             <h3 class="card-title">
               {{ project.name }}
-              <button type="button" class="btn btn-sm float-right"
-              @click="openEditProject($event, project.id)">
-                <edit-3-icon size="1.5x"></edit-3-icon>
-              </button>
+              <b-button variant="outline" class="float-right right"
+                @click="openEditProject($event, project.id)">
+                <b-icon-pencil font-scale="2"></b-icon-pencil>
+              </b-button>
             </h3>
             <p class="card-text">{{ project.description }}</p>
           </div>
@@ -61,8 +62,8 @@
 
 <script>
 
-import { Edit3Icon } from 'vue-feather-icons';
 import { mapState, mapGetters, mapActions } from 'vuex';
+import { BIconPencil, BIconPlus } from 'bootstrap-vue';
 import LoadingText from '@/components/LoadingText.vue';
 import EditProjectForm from '@/components/EditProjectForm.vue';
 import SecondaryNavbar from '@/components/SecondaryNavbar.vue';
@@ -72,7 +73,8 @@ export default {
 
   components: {
     LoadingText,
-    Edit3Icon,
+    BIconPencil,
+    BIconPlus,
     EditProjectForm,
     SecondaryNavbar,
   },

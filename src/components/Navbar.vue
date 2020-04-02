@@ -31,7 +31,7 @@ export default {
   name: 'Navbar',
   methods: {
     goHome() {
-      if (this.$route.path != '/home') {
+      if (this.$route.path !== '/home') {
         this.$router.push('/home');
       }
     },
