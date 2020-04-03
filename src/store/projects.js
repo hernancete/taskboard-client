@@ -9,6 +9,7 @@ export default {
     loading: false,
     creating: false,
     updating: false,
+    removing: false,
     projects: [],
   },
 
@@ -35,6 +36,10 @@ export default {
       state.updating = !!payload;
     },
 
+    removing: (state, payload) => {
+      state.removing = !!payload;
+    },
+
     set: (state, payload) => {
       if (payload === null) {
         state.projects = [];
@@ -55,6 +60,11 @@ export default {
       state.projects[projectIndex].name = payload.name;
       state.projects[projectIndex].description = payload.description;
       state.projects[projectIndex].imageUrl = payload.imageUrl;
+    },
+
+    remove: (state, projectId) => {
+      const projectIndex = state.projects.findIndex((p) => p.id === projectId);
+      state.projects.splice(projectIndex, 1);
     },
   },
 
@@ -98,6 +108,20 @@ export default {
       catch (err) {
         // console.error(err);
         commit('updating', false);
+        throw new Error(err);
+      }
+    },
+
+    remove: async ({ commit }, projectId) => {
+      commit('removing', true);
+      try {
+        const response = await projects.remove(projectId);
+        commit('remove', response.data);
+        commit('removing', false);
+      }
+      catch (err) {
+        // console.error(err);
+        commit('removing', false);
         throw new Error(err);
       }
     },

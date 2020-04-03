@@ -37,10 +37,23 @@ const put = async (id, data) => {
   }
 };
 
+const remove = async (id) => {
+  try {
+    const projectUrl = `${url}/${id}`;
+    const project = await axios.delete(projectUrl);
+    return project;
+  }
+  catch (err) {
+    // console.error(err);
+    throw new Error(err);
+  }
+};
+
 const projects = {
   get,
   post,
   put,
+  remove,
 };
 
 export default projects;

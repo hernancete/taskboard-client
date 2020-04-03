@@ -6,7 +6,6 @@
         <b-icon-plus font-scale="2"></b-icon-plus> New Project
       </b-button>
     </secondary-navbar>
-
     <loading-text v-if="!loaded || loading"></loading-text>
     <div v-else class="row">
 
@@ -30,17 +29,20 @@
       </div> -->
 
       <div v-for="project in projects" :key="project.id"
-      class="col-md-4 col-sm-6 col-12 mb-4 pointer"
-      @click="goToProject(project.id)">
-        <div class="card">
+      class="col-md-4 col-sm-6 col-12 mb-4">
+        <div class="card pointer" @click="goToProject(project.id)">
           <img v-bind:src="project.imageUrl"
           class="card-img-top" :alt="project.name">
           <div class="card-body">
-            <h3 class="card-title">
-              {{ project.name }}
-              <b-button variant="outline" class="float-right right"
+            <h3 class="card-title d-flex align-items-start">
+              <div class="mr-auto">{{ project.name }}</div>
+              <b-button variant="outline" class="right"
                 @click="openEditProject($event, project.id)">
                 <b-icon-pencil font-scale="2"></b-icon-pencil>
+              </b-button>
+              <b-button variant="outline" class="right"
+                @click="openRemoveProject($event, project.id)">
+                <b-icon-trash font-scale="2"></b-icon-trash>
               </b-button>
             </h3>
             <p class="card-text">{{ project.description }}</p>
@@ -49,11 +51,17 @@
       </div>
     </div>
 
-    <b-modal id="edit-project" v-model="editing"
-      @ok="edit">
+    <b-modal id="edit-project" v-model="editing" @ok="edit">
       <template v-slot:modal-title>{{ editingProject.name }}</template>
       <template v-slot>
         <edit-project-form :project="editingProject"></edit-project-form>
+      </template>
+    </b-modal>
+
+    <b-modal id="remove-project" v-model="removing" @ok="remove">
+      <template v-slot:modal-title>Delete {{ removingProject.name }}</template>
+      <template v-slot>
+        <div >Are sure you want to delete the <b>{{removingProject.name}}</b> project?</div>
       </template>
     </b-modal>
 
@@ -63,7 +71,7 @@
 <script>
 
 import { mapState, mapGetters, mapActions } from 'vuex';
-import { BIconPencil, BIconPlus } from 'bootstrap-vue';
+import { BIconPencil, BIconPlus, BIconTrash } from 'bootstrap-vue';
 import LoadingText from '@/components/LoadingText.vue';
 import EditProjectForm from '@/components/EditProjectForm.vue';
 import SecondaryNavbar from '@/components/SecondaryNavbar.vue';
@@ -75,6 +83,7 @@ export default {
     LoadingText,
     BIconPencil,
     BIconPlus,
+    BIconTrash,
     EditProjectForm,
     SecondaryNavbar,
   },
@@ -82,7 +91,9 @@ export default {
   data() {
     return {
       editing: false,
+      removing: false,
       editingProject: {},
+      removingProject: {},
     };
   },
 
@@ -103,6 +114,7 @@ export default {
       getProjects: 'get',
       createProject: 'create',
       updateProject: 'update',
+      removeProject: 'remove',
     }),
 
     openEditProject(event, projectId) {
@@ -117,17 +129,39 @@ export default {
       this.editing = true;
     },
 
-    edit() {
+    openRemoveProject(event, projectId) {
+      event.stopPropagation();
+      const d = this.projects.find((p) => p.id === projectId);
+      this.removingProject = { ...d };
+      this.removing = true;
+    },
+
+    resetEditing() {
+      this.editingProject = {};
+    },
+
+    resetRemoving() {
+      this.removingProject = {};
+    },
+
+    async edit() {
       // TODO: do some form validation
       if (this.editingProject.id === 0) {
         const newProject = { ...this.editingProject };
         delete newProject.id;
-        this.createProject(newProject);
+        await this.createProject(newProject);
       }
       else {
         const updateProject = { ...this.editingProject };
-        this.updateProject(updateProject);
+        await this.updateProject(updateProject);
+        console.log('Not awaiting ni bosta');
       }
+      this.resetEditing();
+    },
+
+    async remove() {
+      await this.removeProject(this.removingProject.id);
+      this.resetRemoving();
     },
 
     goToProject(projectId) {
