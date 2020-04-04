@@ -3,9 +3,11 @@ import config from './config';
 
 const url = `${config.apiUrl}/projects`;
 
-const get = async () => {
+const get = async (filter = {}) => {
   try {
-    const projects = await axios.get(url);
+    const projects = await axios.get(url, {
+      params: filter,
+    });
     return projects;
   }
   catch (err) {

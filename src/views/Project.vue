@@ -9,7 +9,7 @@
         <b-icon-plus font-scale="2"></b-icon-plus> New Task
       </b-button>
     </secondary-navbar>
-    <loading-text v-if="!loaded || loading"></loading-text>
+    <loading-text v-if="!projectLoaded || refreshingProject"></loading-text>
     <div v-else class="row">
       <div class="col-4">
         <h5 class="text-primary d-flex justify-content-center">ToDo</h5>
@@ -59,25 +59,38 @@ export default {
     return {
       project: {},
       title: '...',
+      projectId: parseInt(this.$route.params.id, 10),
     };
   },
 
   computed: {
     ...mapState('projects', {
-      loaded: 'loaded',
-      loading: 'loading',
+      refreshingProject: 'refreshing',
       projects: 'projects',
     }),
+
+    ...mapState('tasks', {
+      loaded: 'loaded',
+      loading: 'loading',
+      tasks: 'tasks',
+    }),
+
+    projectLoaded() {
+      return this.projects.findIndex((p) => p.id === this.projectId) !== -1;
+    },
   },
 
   methods: {
     ...mapActions('projects', {
-      getProjects: 'get',
+      refreshProject: 'refresh',
+    }),
+
+    ...mapActions('tasks', {
+      getTasks: 'get',
     }),
 
     init() {
-      const projectId = parseInt(this.$route.params.id, 10);
-      this.project = this.projects.find((p) => p.id === projectId);
+      this.project = this.projects.find((p) => p.id === this.projectId);
       this.title = this.project.name;
     },
 
@@ -86,15 +99,20 @@ export default {
     },
   },
 
-  created() {
-    if (!this.loaded) {
-      this.getProjects()
-        .then(() => this.init())
-        .catch(() => console.error('Something went wrong getting projects.'));
+  async mounted() {
+    if (!this.projectLoaded) {
+      try {
+        await this.refreshProject(this.projectId);
+        this.init();
+      }
+      catch {
+        console.error('Something went wrong refreshing project.');
+      }
     }
     else {
       this.init();
     }
+    this.getTasks(this.projectId);
   },
 };
 </script>

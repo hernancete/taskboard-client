@@ -1,4 +1,7 @@
-
 import projects from './projects';
+import tasks from './tasks';
 
-export default projects;
+export {
+  projects,
+  tasks,
+};

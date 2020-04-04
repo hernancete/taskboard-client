@@ -1,4 +1,4 @@
-import projects from '../api';
+import { projects } from '../api';
 
 export default {
 
@@ -9,6 +9,7 @@ export default {
     loading: false,
     creating: false,
     updating: false,
+    refreshing: false,
     removing: false,
     projects: [],
   },
@@ -34,6 +35,10 @@ export default {
 
     updating: (state, payload) => {
       state.updating = !!payload;
+    },
+
+    refreshing: (state, payload) => {
+      state.refreshing = !!payload;
     },
 
     removing: (state, payload) => {
@@ -62,6 +67,16 @@ export default {
       state.projects[projectIndex].imageUrl = payload.imageUrl;
     },
 
+    refresh: (state, payload) => {
+      const projectIndex = state.projects.findIndex((p) => p.id === payload.id);
+      if (projectIndex === -1) {
+        state.projects.push(payload);
+      }
+      else {
+        state.projects.splice(projectIndex, 1, payload);
+      }
+    },
+
     remove: (state, projectId) => {
       const projectIndex = state.projects.findIndex((p) => p.id === projectId);
       state.projects.splice(projectIndex, 1);
@@ -77,7 +92,6 @@ export default {
         commit('loading', false);
       }
       catch (err) {
-        // console.error(err);
         commit('set', null);
         commit('loading', false);
         throw new Error(err);
@@ -92,7 +106,6 @@ export default {
         commit('creating', false);
       }
       catch (err) {
-        // console.error(err);
         commit('creating', false);
         throw new Error(err);
       }
@@ -106,8 +119,20 @@ export default {
         commit('updating', false);
       }
       catch (err) {
-        // console.error(err);
         commit('updating', false);
+        throw new Error(err);
+      }
+    },
+
+    refresh: async ({ commit }, id) => {
+      commit('refreshing', true);
+      try {
+        const response = await projects.get({ id });
+        commit('refresh', response.data[0]);
+        commit('refreshing', false);
+      }
+      catch (err) {
+        commit('refreshing', false);
         throw new Error(err);
       }
     },
@@ -120,12 +145,10 @@ export default {
         commit('removing', false);
       }
       catch (err) {
-        // console.error(err);
         commit('removing', false);
         throw new Error(err);
       }
     },
-
   },
 
 };

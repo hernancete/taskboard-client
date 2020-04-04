@@ -3,13 +3,14 @@ import config from './config';
 
 const url = `${config.apiUrl}/tasks`;
 
-const get = async () => {
+const get = async (filter) => {
   try {
-    const tasks = await axios.get(url);
+    const tasks = await axios.get(url, {
+      params: filter,
+    });
     return tasks;
   }
   catch (err) {
-    // console.error(err);
     throw new Error(err);
   }
 };
@@ -20,7 +21,6 @@ const post = async (data) => {
     return task;
   }
   catch (err) {
-    // console.error(err);
     throw new Error(err);
   }
 };
